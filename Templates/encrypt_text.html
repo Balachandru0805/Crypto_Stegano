@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Crypto-Stegano Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<style>
+body {
+  background-color: #92a8d1;
+}
+
+ul.navbar-nav li a:hover:not(.active) {background-color: #DEB887;}
+ul.navbar-nav li a.active {background-color:#92a8d1;}
+
+input[type=text], select, textarea {
+  width: 90%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 90%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+input[type=file]{
+  width: 90%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.container {
+    border-radius:5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  width:60%;
+  
+}
+</style>
+</head>
+<body>
+<div class="w3-border w3-center ">
+    <div class="w3-container w3-green">
+      <h2> CryptoStegano </h2>
+    </div>
+</div>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+      <li ><a href="home"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+      <li><a class="active"  href="encrypt_text">Encrypt Text</a></li>
+      <li><a href="decrypt_text">Decrypt Text</a></li>
+      <li><a href="encrypt_image">Encrypt Image</a></li>
+      <li><a href="decrypt_image">Decrypt Image</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="about_us"><span class="glyphicon glyphicon-user"></span> About Us </a></li>
+    </ul>
+  </div>
+</nav>
+  
+
+<script>  
+var ht,wd,cnt,len;
+function validateform(){
+var p_text = document.forms["myform"]["plain_text"].value;
+var ky = document.forms["myform"]["key"].value;
+var ms = document.forms["myform"]["methods"].value;
+len =   p_text.length;
+if (len%8!=0){  
+  alert("Plain text must be multible of 8 characters");
+  return false;  
+ }
+if (len>cnt){
+    alert("Please select another image you can only store upto "+cnt+" characters on this image");
+    return false;
+    }
+if(ms=="aes"){
+    if(ky.length != 8){
+     alert("Please enter valid key");
+     return false;
+    }
+}
+else{
+   if(ky.length != 24){
+    alert("Please enter valid key");
+    return false;
+   }
+}
+
+}
+
+function check(input) {
+          var p_text = document.forms["myform"]["plain_text"].value;
+          var len =   p_text.length;
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var img = new Image;
+            img.onload = function() {
+	ht = img.height
+	wd = img.width;
+              cnt = (ht * wd * 3)/8;
+    	cnt = cnt.toFixed(0);
+    	var rm = cnt % 8;
+	cnt = cnt-rm;
+    	if (len>cnt){
+           	alert("Please select another image you can only store upto "+cnt+" characters on this image");
+    	}
+            };
+            img.src = reader.result;
+          };
+          reader.readAsDataURL(input.files[0]);
+ }
+
+</script>  
+
+<div class="container w3-center">
+  <form  name="myform" method="post" enctype="multipart/form-data" onsubmit="return validateform()" action="/enc_txt_action">
+
+    <label for="name">Plain Text</label>
+    <textarea rows="4" cols="50" name="plain_text" placeholder="Please enter multible of 8 characters" required></textarea> 
+
+    <label for="cover">Cover Image</label><br>
+    <input type="file" id="img1" name="img1" onchange="check(this);" accept="image/*" required><br>
+
+    <label for="algorithm">Algorithm</label>
+    <select id="methods" name="methods">
+      <option value="triple_des">Triple DES</option>
+      <option value="aes">AES</option>
+    </select><br>
+	
+   <label >key</label><br>
+   <input type="text" name="key" placeholder="Enter a 24 characters for Triple Des encryption or 8 characters for AES encryption " required><br>
+
+    <input type="submit" value="Submit">
+  </form>
+</div>
+
+</body>
+</html>
