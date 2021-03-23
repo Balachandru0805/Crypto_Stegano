@@ -1,0 +1,6 @@
+flask==1.1.2
+pyDes
+base64
+PIL
+stegano
+cryptosteganography
